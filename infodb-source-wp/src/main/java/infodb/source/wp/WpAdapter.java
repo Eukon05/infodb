@@ -1,4 +1,4 @@
-package infodb.service.wp;
+package infodb.source.wp;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -14,7 +14,7 @@ final class WpAdapter {
     private static final URI sourceURI = URI.create("https://wiadomosci.wp.pl/api/v1/data/graphql");
     private static final String latestArticlesQuery = """
             {
-              "query": "query Recommendations { recommendations { newest(productIds: \\"5973184000386177\\", limit: %d) { version count teasers { url type subtype slug title author sponsored publications { productId url } image contentId } } }}"
+              "query": "query Recommendations { recommendations { newest(productIds: \\"5973184000386177\\", limit: 75, contentTypes: ARTICLE) { version count teasers { url type subtype slug title author sponsored publications { productId url } image contentId } } }}"
             }""";
 
     private static final String articleDetailsQuery = """
@@ -24,13 +24,11 @@ final class WpAdapter {
 
     private static final Gson gson = new Gson();
 
-    static JsonArray getLatest(int num){
-        if(num > 75)
-            throw new IllegalArgumentException("WP's API does not support fetching more than 75 latest articles at once");
+    static JsonArray getLatest(){
         try (HttpClient client = HttpClient.newHttpClient()) {
             HttpRequest latestArticlesRequest = HttpRequest
                     .newBuilder()
-                    .POST(HttpRequest.BodyPublishers.ofString(String.format(latestArticlesQuery, num)))
+                    .POST(HttpRequest.BodyPublishers.ofString(latestArticlesQuery))
                     .uri(sourceURI)
                     .build();
 

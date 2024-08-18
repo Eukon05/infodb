@@ -1,4 +1,4 @@
-import infodb.service.wp.WpSource;
+import infodb.source.wp.WpSource;
 
 module infodb.source.wp {
     requires infodb.api;

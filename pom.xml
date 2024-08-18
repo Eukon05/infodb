@@ -12,6 +12,7 @@
         <module>infodb-api</module>
         <module>infodb-source-wp</module>
         <module>infodb-app</module>
+        <module>infodb-source-donald</module>
     </modules>
 
     <properties>

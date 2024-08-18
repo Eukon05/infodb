@@ -1,4 +1,4 @@
-package infodb.service.wp;
+package infodb.source.wp;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;

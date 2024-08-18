@@ -1,4 +1,4 @@
-package infodb.service.wp;
+package infodb.source.wp;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -9,8 +9,8 @@ import java.util.List;
 
 public final class WpSource implements infodb.api.ArticleSource {
     @Override
-    public List<Article> getLatest(int num) {
-        return mapArticles(WpAdapter.getLatest(num));
+    public List<Article> getLatest() {
+        return mapArticles(WpAdapter.getLatest());
     }
 
     private List<Article> mapArticles(JsonArray articles) {
