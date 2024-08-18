@@ -9,7 +9,7 @@ public class Main {
         ServiceLoader<ArticleSource> sources = ServiceLoader.load(ArticleSource.class);
 
         for (ArticleSource source : sources) {
-            source.getLatest(75).forEach(System.out::println);
+            source.getLatest(5).forEach(System.out::println);
         }
     }
 }

@@ -1,6 +1,7 @@
 package infodb.api;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
+import java.util.List;
 
-public record Article(String id, String title, String url, String imageUrl, LocalDateTime datePublished) {
+public record Article(String id, String origin, String title, String url, String imageUrl, Instant datePublished, List<String> tags) {
 }
