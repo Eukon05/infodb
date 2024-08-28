@@ -13,6 +13,7 @@
         <module>infodb-source-wp</module>
         <module>infodb-app</module>
         <module>infodb-source-donald</module>
+        <module>infodb-source-onet</module>
     </modules>
 
     <properties>

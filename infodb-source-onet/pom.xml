@@ -9,27 +9,18 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>infodb-app</artifactId>
+    <artifactId>infodb-source-onet</artifactId>
 
     <dependencies>
         <dependency>
+            <!-- jsoup HTML parser library @ https://jsoup.org/ -->
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+            <version>1.18.1</version>
+        </dependency>
+        <dependency>
             <groupId>ovh.eukon05</groupId>
             <artifactId>infodb-api</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>ovh.eukon05</groupId>
-            <artifactId>infodb-source-wp</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>ovh.eukon05</groupId>
-            <artifactId>infodb-source-donald</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>ovh.eukon05</groupId>
-            <artifactId>infodb-source-onet</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
