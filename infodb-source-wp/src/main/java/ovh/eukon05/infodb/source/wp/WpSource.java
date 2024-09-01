@@ -1,13 +1,14 @@
-package infodb.source.wp;
+package ovh.eukon05.infodb.source.wp;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import infodb.api.Article;
+import ovh.eukon05.infodb.api.Article;
+import ovh.eukon05.infodb.api.ArticleSource;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public final class WpSource implements infodb.api.ArticleSource {
+public final class WpSource implements ArticleSource {
     @Override
     public List<Article> getLatest() {
         return mapArticles(WpAdapter.getLatest());

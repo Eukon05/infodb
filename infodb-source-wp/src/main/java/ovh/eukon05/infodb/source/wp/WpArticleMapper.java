@@ -1,8 +1,8 @@
-package infodb.source.wp;
+package ovh.eukon05.infodb.source.wp;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import infodb.api.Article;
+import ovh.eukon05.infodb.api.Article;
 
 import java.time.Instant;
 import java.util.List;

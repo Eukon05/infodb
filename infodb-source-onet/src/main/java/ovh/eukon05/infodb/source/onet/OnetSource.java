@@ -1,7 +1,7 @@
-package infodb.source.onet;
+package ovh.eukon05.infodb.source.onet;
 
-import infodb.api.Article;
-import infodb.api.ArticleSource;
+import ovh.eukon05.infodb.api.Article;
+import ovh.eukon05.infodb.api.ArticleSource;
 
 import java.util.ArrayList;
 import java.util.List;

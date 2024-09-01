@@ -1,4 +1,4 @@
-package infodb.source.wp;
+package ovh.eukon05.infodb.source.wp;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;

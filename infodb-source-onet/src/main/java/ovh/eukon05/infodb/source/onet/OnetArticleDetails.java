@@ -1,4 +1,4 @@
-package infodb.source.onet;
+package ovh.eukon05.infodb.source.onet;
 
 import java.util.List;
 

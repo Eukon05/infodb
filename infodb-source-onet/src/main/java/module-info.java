@@ -1,7 +1,8 @@
-import infodb.source.onet.OnetSource;
+import ovh.eukon05.infodb.api.ArticleSource;
+import ovh.eukon05.infodb.source.onet.OnetSource;
 
-module infodb.source.onet {
-    requires infodb.api;
+module ovh.eukon05.infodb.source.onet {
+    requires ovh.eukon05.infodb.api;
     requires org.jsoup;
-    provides infodb.api.ArticleSource with OnetSource;
+    provides ArticleSource with OnetSource;
 }

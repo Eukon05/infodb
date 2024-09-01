@@ -1,4 +1,4 @@
-package infodb.api;
+package ovh.eukon05.infodb.api;
 
 import java.util.List;
 

@@ -1,10 +1,11 @@
-package infodb.source.donald;
+package ovh.eukon05.infodb.source.donald;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import infodb.api.Article;
+import ovh.eukon05.infodb.api.Article;
 
-import java.time.*;
+import java.time.Instant;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 class DonaldArticleMapper {

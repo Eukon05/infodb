@@ -1,7 +1,7 @@
-package infodb.source.onet;
+package ovh.eukon05.infodb.source.onet;
 
-import infodb.api.Article;
 import org.jsoup.nodes.Element;
+import ovh.eukon05.infodb.api.Article;
 
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
