@@ -7,9 +7,9 @@ import java.util.List;
 
 public class DonaldSource implements ArticleSource {
     @Override
-    public List<Article> getLatest() {
+    public List<Article> getLatest(int limit) {
         return DonaldAdapter
-                .getLatestIds()
+                .getLatestIds(limit)
                 .stream()
                 .map(DonaldAdapter::getArticleDetails)
                 .map(DonaldArticleMapper::mapFromJson).toList();

@@ -9,11 +9,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 final class OnetAdapter {
-    private static final String sourceUrl = "https://wiadomosci.onet.pl/?page=0&limit=75&ajax=1";
+    private static final String sourceUrl = "https://wiadomosci.onet.pl/?page=0&limit=%d&ajax=1";
 
-    static Elements getLatest() {
+    static Elements getLatest(int limit) {
+        if (limit > 105)
+            throw new IllegalArgumentException("ONET's API does not support fetching more than 105 latest articles");
+
         try {
-            return Jsoup.connect(sourceUrl).get().getElementsByClass("itemBox");
+            return Jsoup.connect(String.format(sourceUrl, limit)).get().getElementsByClass("itemBox");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

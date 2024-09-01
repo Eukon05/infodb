@@ -9,23 +9,35 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.ArrayList;
 import java.util.List;
 
 class DonaldAdapter {
+    private static final int DonaldPageLimit = 20;
     private static final Gson gson = new Gson();
-    private static final URI latestArticlesURI = URI.create("https://www.donald.pl/_next/data/58oTIJ0Co8UxCd-940jRU/news.json?page=1");
+    private static final String latestArticlesURL = "https://www.donald.pl/_next/data/58oTIJ0Co8UxCd-940jRU/news.json?page=%d";
     private static final String articleDetailsUrl = "https://www.donald.pl/api/v1/articles/%s";
 
-    static List<String> getLatestIds(){
+    static List<String> getLatestIds(int limit) {
         try (HttpClient client = HttpClient.newHttpClient()) {
-            HttpRequest latestArticlesRequest = HttpRequest
-                    .newBuilder()
-                    .uri(latestArticlesURI)
-                    .GET()
-                    .build();
+            List<String> result = new ArrayList<>();
 
-            HttpResponse<String> response = client.send(latestArticlesRequest, HttpResponse.BodyHandlers.ofString());
-            return extractIds(response.body());
+            int page = 1;
+
+            do {
+                HttpRequest latestArticlesRequest = HttpRequest
+                        .newBuilder()
+                        .uri(URI.create(String.format(latestArticlesURL, page)))
+                        .GET()
+                        .build();
+
+                HttpResponse<String> response = client.send(latestArticlesRequest, HttpResponse.BodyHandlers.ofString());
+                result.addAll(limit < DonaldPageLimit ? extractIds(response.body(), limit) : extractIds(response.body(), DonaldPageLimit));
+                page++;
+            }
+            while ((limit -= DonaldPageLimit) > 0);
+
+            return result;
         } catch (IOException | InterruptedException e) {
             throw new RuntimeException(e);
         }
@@ -48,10 +60,15 @@ class DonaldAdapter {
         }
     }
 
-    private static List<String> extractIds(String responseJson){
+    private static List<String> extractIds(String responseJson, int limit) {
         return gson.fromJson(responseJson, JsonObject.class)
                 .getAsJsonObject("pageProps")
                 .getAsJsonArray("news")
-                .asList().stream().map(JsonElement::getAsJsonObject).map(e -> e.get("uuid").getAsString()).toList();
+                .asList()
+                .stream()
+                .limit(limit)
+                .map(JsonElement::getAsJsonObject)
+                .map(e -> e.get("uuid").getAsString())
+                .toList();
     }
 }

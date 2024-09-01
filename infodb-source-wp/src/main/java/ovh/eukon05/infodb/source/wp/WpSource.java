@@ -10,8 +10,8 @@ import java.util.List;
 
 public final class WpSource implements ArticleSource {
     @Override
-    public List<Article> getLatest() {
-        return mapArticles(WpAdapter.getLatest());
+    public List<Article> getLatest(int limit) {
+        return mapArticles(WpAdapter.getLatest(limit));
     }
 
     private List<Article> mapArticles(JsonArray articles) {
