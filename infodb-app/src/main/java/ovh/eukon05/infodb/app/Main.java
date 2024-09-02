@@ -1,21 +1,24 @@
 package ovh.eukon05.infodb.app;
 
-import ovh.eukon05.infodb.api.Article;
 import ovh.eukon05.infodb.api.ArticleSource;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.ServiceLoader;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws FileNotFoundException {
         ServiceLoader<ArticleSource> sources = ServiceLoader.load(ArticleSource.class);
 
-        List<Article> combined = new ArrayList<>();
+        // Test for Onet source's extended article limit
+
         for (ArticleSource source : sources) {
-            combined.addAll(source.getLatest());
+            if (source.getClass().getName().toLowerCase().contains("onet")) {
+                try (PrintWriter writer = new PrintWriter("out.txt")) {
+                    source.getLatest(210).forEach(a -> writer.println(a.id()));
+                }
+            }
         }
 
-        combined.forEach(System.out::println);
     }
 }

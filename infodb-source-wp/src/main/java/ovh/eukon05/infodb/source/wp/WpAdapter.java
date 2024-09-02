@@ -25,7 +25,9 @@ final class WpAdapter {
     private static final Gson gson = new Gson();
 
     static JsonArray getLatest(int limit) {
-        if (limit > 75)
+        if (limit <= 0)
+            throw new IllegalArgumentException("Can't fetch a negative number of articles (provided limit is negative or zero)");
+        else if (limit > 75)
             throw new IllegalArgumentException("WP's API does not support fetching more than 75 latest articles");
 
         try (HttpClient client = HttpClient.newHttpClient()) {

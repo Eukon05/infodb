@@ -19,6 +19,9 @@ class DonaldAdapter {
     private static final String articleDetailsUrl = "https://www.donald.pl/api/v1/articles/%s";
 
     static List<String> getLatestIds(int limit) {
+        if (limit <= 0)
+            throw new IllegalArgumentException("Can't fetch a negative number of articles (provided limit is negative or zero)");
+
         try (HttpClient client = HttpClient.newHttpClient()) {
             List<String> result = new ArrayList<>();
 

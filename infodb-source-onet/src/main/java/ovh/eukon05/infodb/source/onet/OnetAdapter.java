@@ -9,14 +9,37 @@ import java.util.ArrayList;
 import java.util.List;
 
 final class OnetAdapter {
-    private static final String sourceUrl = "https://wiadomosci.onet.pl/?page=0&limit=%d&ajax=1";
+    private static final String sourceUrl = "https://wiadomosci.onet.pl/?page=%d&limit=%d&ajax=1";
+    private static final int OnetPageLimit = 105;
 
     static Elements getLatest(int limit) {
-        if (limit > 105)
-            throw new IllegalArgumentException("ONET's API does not support fetching more than 105 latest articles");
+        if (limit <= 0)
+            throw new IllegalArgumentException("Can't fetch a negative number of articles (provided limit is negative or zero)");
 
         try {
-            return Jsoup.connect(String.format(sourceUrl, limit)).get().getElementsByClass("itemBox");
+            if (limit <= OnetPageLimit)
+                return Jsoup.connect(String.format(sourceUrl, 0, limit)).get().getElementsByClass("itemBox");
+            else {
+                int page = 0;
+
+                Elements elements = new Elements();
+
+                do {
+                    Jsoup.connect(String.format(sourceUrl, page, OnetPageLimit))
+                            .get()
+                            .getElementsByClass("itemBox")
+                            .stream()
+                            .limit(limit)
+                            .forEach(elements::add);
+
+                    page++;
+                }
+                while ((limit -= OnetPageLimit) > 0);
+
+                return elements;
+            }
+
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
