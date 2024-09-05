@@ -15,8 +15,32 @@ import java.util.List;
 class DonaldAdapter {
     private static final int DonaldPageLimit = 20;
     private static final Gson gson = new Gson();
-    private static final String latestArticlesURL = "https://www.donald.pl/_next/data/58oTIJ0Co8UxCd-940jRU/news.json?page=%d";
+    private static final String latestArticlesURL;
     private static final String articleDetailsUrl = "https://www.donald.pl/api/v1/articles/%s";
+
+    static {
+        // DonaldPL's build ID changes from time to time, so we have to fetch the current one
+        StringBuilder url = new StringBuilder("https://www.donald.pl/_next/data/");
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("https://www.donald.pl/news"))
+                .GET()
+                .build();
+
+        try (HttpClient client = HttpClient.newHttpClient()) {
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+            int start = response.body().indexOf("buildId") + 10;
+            int end = start + 21;
+
+            url.append(response.body(), start, end);
+            url.append("/news.json");
+
+            latestArticlesURL = url.toString();
+        } catch (IOException | InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     static List<String> getLatestIds(int limit) {
         if (limit <= 0)
