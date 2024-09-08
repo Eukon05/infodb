@@ -14,6 +14,7 @@
         <module>infodb-app</module>
         <module>infodb-source-donald</module>
         <module>infodb-source-onet</module>
+        <module>infodb-api-test</module>
     </modules>
 
     <dependencies>

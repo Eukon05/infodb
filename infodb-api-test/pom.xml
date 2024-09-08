@@ -9,7 +9,7 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>infodb-source-wp</artifactId>
+    <artifactId>infodb-api-test</artifactId>
 
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
@@ -21,18 +21,18 @@
             <groupId>ovh.eukon05</groupId>
             <artifactId>infodb-api</artifactId>
             <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>5.11.0</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>com.google.code.gson</groupId>
-            <artifactId>gson</artifactId>
-            <version>2.10.1</version>
-        </dependency>
-        <dependency>
-            <groupId>ovh.eukon05</groupId>
-            <artifactId>infodb-api-test</artifactId>
-            <version>1.0-SNAPSHOT</version>
-            <scope>test</scope>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>5.11.0</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 
