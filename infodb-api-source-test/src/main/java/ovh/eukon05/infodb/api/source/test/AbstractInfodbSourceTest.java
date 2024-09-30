@@ -1,8 +1,8 @@
-package ovh.eukon05.infodb.api.test;
+package ovh.eukon05.infodb.api.source.test;
 
 import org.junit.jupiter.api.Test;
-import ovh.eukon05.infodb.api.Article;
-import ovh.eukon05.infodb.api.ArticleSource;
+import ovh.eukon05.infodb.api.source.Article;
+import ovh.eukon05.infodb.api.source.ArticleSource;
 
 import java.util.List;
 import java.util.Random;

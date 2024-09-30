@@ -1,7 +1,7 @@
 package ovh.eukon05.infodb.source.wp.test;
 
 import org.junit.jupiter.api.Test;
-import ovh.eukon05.infodb.api.test.AbstractInfodbSourceTest;
+import ovh.eukon05.infodb.api.source.test.AbstractInfodbSourceTest;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 

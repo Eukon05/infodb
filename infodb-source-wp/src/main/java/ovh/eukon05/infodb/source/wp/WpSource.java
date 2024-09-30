@@ -2,8 +2,8 @@ package ovh.eukon05.infodb.source.wp;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import ovh.eukon05.infodb.api.Article;
-import ovh.eukon05.infodb.api.ArticleSource;
+import ovh.eukon05.infodb.api.source.Article;
+import ovh.eukon05.infodb.api.source.ArticleSource;
 
 import java.util.ArrayList;
 import java.util.List;

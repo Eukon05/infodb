@@ -2,13 +2,16 @@ package ovh.eukon05.infodb.source.wp;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import ovh.eukon05.infodb.api.Article;
+import ovh.eukon05.infodb.api.source.Article;
 
 import java.time.Instant;
 import java.util.List;
 
 final class WpArticleMapper {
-    private static final String origin = "Wirtualna Polska";
+    private static final String ORIGIN = "Wirtualna Polska";
+
+    private WpArticleMapper() {
+    }
 
     static Article mapFromJson(JsonObject articleJson, JsonObject articleDetailsJson) {
         String title = articleJson.get("title").getAsString();
@@ -25,6 +28,6 @@ final class WpArticleMapper {
                 .map(JsonElement::getAsString)
                 .toList();
 
-        return new Article(id, origin ,title, url, imageUrl, Instant.ofEpochSecond(createdAt), tags);
+        return new Article(id, ORIGIN, title, url, imageUrl, Instant.ofEpochSecond(createdAt), tags);
     }
 }

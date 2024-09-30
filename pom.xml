@@ -9,12 +9,12 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <modules>
-        <module>infodb-api</module>
+        <module>infodb-api-source</module>
         <module>infodb-source-wp</module>
         <module>infodb-app</module>
         <module>infodb-source-donald</module>
         <module>infodb-source-onet</module>
-        <module>infodb-api-test</module>
+        <module>infodb-api-source-test</module>
     </modules>
 
     <dependencies>

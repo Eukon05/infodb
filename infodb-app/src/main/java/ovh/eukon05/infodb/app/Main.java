@@ -1,6 +1,6 @@
 package ovh.eukon05.infodb.app;
 
-import ovh.eukon05.infodb.api.ArticleSource;
+import ovh.eukon05.infodb.api.source.ArticleSource;
 
 import java.util.ServiceLoader;
 
