@@ -11,18 +11,21 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
 final class WpAdapter {
-    private static final URI sourceURI = URI.create("https://wiadomosci.wp.pl/api/v1/data/graphql");
-    private static final String latestArticlesQuery = """
+    private static final URI SOURCE_URI = URI.create("https://wiadomosci.wp.pl/api/v1/data/graphql");
+    private static final String LATEST_ARTICLES_QUERY = """
             {
               "query": "query Recommendations { recommendations { newest(productIds: \\"5973184000386177\\", limit: %d, contentTypes: ARTICLE) { version count teasers { url type subtype slug title author sponsored publications { productId url } image contentId } } }}"
             }""";
 
-    private static final String articleDetailsQuery = """
+    private static final String ARTICLE_DETAILS_QUERY = """
             {
               "query": "query Collections { collections(productId: \\"5973184000386177\\") { article(id: \\"%s\\") { created tags { slug } } }}"
             }""";
 
-    private static final Gson gson = new Gson();
+    private static final Gson GSON = new Gson();
+
+    private WpAdapter() {
+    }
 
     static JsonArray getLatest(int limit) {
         if (limit <= 0)
@@ -33,8 +36,8 @@ final class WpAdapter {
         try (HttpClient client = HttpClient.newHttpClient()) {
             HttpRequest latestArticlesRequest = HttpRequest
                     .newBuilder()
-                    .POST(HttpRequest.BodyPublishers.ofString(String.format(latestArticlesQuery, limit)))
-                    .uri(sourceURI)
+                    .POST(HttpRequest.BodyPublishers.ofString(String.format(LATEST_ARTICLES_QUERY, limit)))
+                    .uri(SOURCE_URI)
                     .build();
 
             HttpResponse<String> response = client.send(latestArticlesRequest, HttpResponse.BodyHandlers.ofString());
@@ -48,8 +51,8 @@ final class WpAdapter {
         try (HttpClient client = HttpClient.newHttpClient()) {
             HttpRequest articleDetailsRequest = HttpRequest
                     .newBuilder()
-                    .POST(HttpRequest.BodyPublishers.ofString(String.format(articleDetailsQuery, articleId)))
-                    .uri(sourceURI)
+                    .POST(HttpRequest.BodyPublishers.ofString(String.format(ARTICLE_DETAILS_QUERY, articleId)))
+                    .uri(SOURCE_URI)
                     .build();
 
             HttpResponse<String> response = client.send(articleDetailsRequest, HttpResponse.BodyHandlers.ofString());
@@ -60,14 +63,14 @@ final class WpAdapter {
     }
 
     private static JsonObject extractArticleDetails(String responseJson){
-        return gson.fromJson(responseJson, JsonObject.class)
+        return GSON.fromJson(responseJson, JsonObject.class)
                 .getAsJsonObject("data")
                 .getAsJsonObject("collections")
                 .getAsJsonObject("article");
     }
 
     private static JsonArray extractTeasers(String responseJson){
-        return gson.fromJson(responseJson, JsonObject.class)
+        return GSON.fromJson(responseJson, JsonObject.class)
                 .getAsJsonObject("data")
                 .getAsJsonObject("recommendations")
                 .getAsJsonObject("newest")

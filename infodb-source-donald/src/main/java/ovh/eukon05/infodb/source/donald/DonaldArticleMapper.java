@@ -10,7 +10,7 @@ import java.util.List;
 
 class DonaldArticleMapper {
     private static final String BASE_URL = "https://www.donald.pl/artykuly/%s";
-    private static final String ORIGIN = "DonaldPL";
+    private static final String ORIGIN = "DONALDPL";
 
     private DonaldArticleMapper() {
     }

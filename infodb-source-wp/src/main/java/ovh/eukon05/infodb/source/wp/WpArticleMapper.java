@@ -8,7 +8,7 @@ import java.time.Instant;
 import java.util.List;
 
 final class WpArticleMapper {
-    private static final String ORIGIN = "Wirtualna Polska";
+    private static final String ORIGIN = "WP";
 
     private WpArticleMapper() {
     }

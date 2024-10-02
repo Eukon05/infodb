@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/infodb-api-persistence/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/infodb-api-persistence/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/infodb-api-source-test/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/infodb-api-source-test/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/infodb-api-source/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/infodb-api-source/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/infodb-app/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/infodb-app/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/infodb-persistence-hashmap/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/infodb-persistence-hashmap/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/infodb-source-donald/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/infodb-source-donald/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/infodb-source-onet/src/main/java" charset="UTF-8" />
