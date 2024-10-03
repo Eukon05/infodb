@@ -3,7 +3,7 @@ package ovh.eukon05.infodb.source.onet;
 import org.jsoup.nodes.Element;
 import ovh.eukon05.infodb.api.source.Article;
 
-import java.time.OffsetDateTime;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
 final class OnetArticleMapper {
@@ -26,7 +26,7 @@ final class OnetArticleMapper {
         String title = articleElement.getElementsByTag("span").text();
 
         // Article will have its publication time shifted to the UTC timezone this way!
-        OffsetDateTime pubDate = OffsetDateTime.parse(details.pubDate(), DTF);
+        ZonedDateTime pubDate = ZonedDateTime.parse(details.pubDate(), DTF);
 
         return new Article(id, PROVIDER, title, url, imageUrl, pubDate.toInstant(), details.tags());
     }
