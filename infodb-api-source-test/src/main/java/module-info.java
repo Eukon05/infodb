@@ -3,5 +3,5 @@ open module ovh.eukon05.infodb.api.source.test {
     requires transitive org.junit.jupiter.api;
     requires transitive org.junit.jupiter.engine;
     exports ovh.eukon05.infodb.api.source.test;
-    uses ArticleSource;
+    uses ovh.eukon05.infodb.api.source.ArticleSource;
 }

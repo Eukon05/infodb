@@ -3,6 +3,7 @@ package ovh.eukon05.infodb.source.wp;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import ovh.eukon05.infodb.api.source.ArticleSourceConnectionFailedException;
 
 import java.io.IOException;
 import java.net.URI;
@@ -34,31 +35,27 @@ final class WpAdapter {
             throw new IllegalArgumentException("WP's API does not support fetching more than 75 latest articles");
 
         try (HttpClient client = HttpClient.newHttpClient()) {
-            HttpRequest latestArticlesRequest = HttpRequest
-                    .newBuilder()
-                    .POST(HttpRequest.BodyPublishers.ofString(String.format(LATEST_ARTICLES_QUERY, limit)))
-                    .uri(SOURCE_URI)
-                    .build();
+            HttpRequest latestArticlesRequest = preparePostRequest(String.format(LATEST_ARTICLES_QUERY, limit));
 
             HttpResponse<String> response = client.send(latestArticlesRequest, HttpResponse.BodyHandlers.ofString());
+            checkResponseStatus(response.statusCode());
+
             return extractTeasers(response.body());
         } catch (IOException | InterruptedException e) {
-            throw new RuntimeException(e);
+            throw new ArticleSourceConnectionFailedException();
         }
     }
 
     static JsonObject getArticleDetails(String articleId){
         try (HttpClient client = HttpClient.newHttpClient()) {
-            HttpRequest articleDetailsRequest = HttpRequest
-                    .newBuilder()
-                    .POST(HttpRequest.BodyPublishers.ofString(String.format(ARTICLE_DETAILS_QUERY, articleId)))
-                    .uri(SOURCE_URI)
-                    .build();
+            HttpRequest articleDetailsRequest = preparePostRequest(String.format(ARTICLE_DETAILS_QUERY, articleId));
 
             HttpResponse<String> response = client.send(articleDetailsRequest, HttpResponse.BodyHandlers.ofString());
+            checkResponseStatus(response.statusCode());
+
             return extractArticleDetails(response.body());
         } catch (IOException | InterruptedException e) {
-            throw new RuntimeException(e);
+            throw new ArticleSourceConnectionFailedException();
         }
     }
 
@@ -75,5 +72,18 @@ final class WpAdapter {
                 .getAsJsonObject("recommendations")
                 .getAsJsonObject("newest")
                 .getAsJsonArray("teasers");
+    }
+
+    private static HttpRequest preparePostRequest(String body) {
+        return HttpRequest.newBuilder()
+                .POST(HttpRequest.BodyPublishers.ofString(body))
+                .uri(SOURCE_URI)
+                .build();
+    }
+
+    private static void checkResponseStatus(int statusCode) {
+        if (statusCode != 200) {
+            throw new ArticleSourceConnectionFailedException(statusCode);
+        }
     }
 }

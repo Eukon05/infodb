@@ -1,8 +1,10 @@
 package ovh.eukon05.infodb.source.onet;
 
+import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
+import ovh.eukon05.infodb.api.source.ArticleSourceConnectionFailedException;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -20,16 +22,21 @@ final class OnetAdapter {
             throw new IllegalArgumentException("Can't fetch a negative number of articles (provided limit is negative or zero)");
 
         try {
-            if (limit <= ONET_PAGE_LIMIT)
-                return Jsoup.connect(String.format(SOURCE_URL, 0, limit)).get().getElementsByClass("itemBox");
+            Connection conn;
+            if (limit <= ONET_PAGE_LIMIT) {
+                conn = Jsoup.connect(String.format(SOURCE_URL, 0, limit));
+                checkResponseStatus(conn.execute().statusCode());
+                return conn.get().getElementsByClass("itemBox");
+            }
             else {
                 int page = 0;
-
                 Elements elements = new Elements();
 
                 do {
-                    Jsoup.connect(String.format(SOURCE_URL, page, ONET_PAGE_LIMIT))
-                            .get()
+                    conn = Jsoup.connect(String.format(SOURCE_URL, page, ONET_PAGE_LIMIT));
+                    checkResponseStatus(conn.execute().statusCode());
+
+                    conn.get()
                             .getElementsByClass("itemBox")
                             .stream()
                             .limit(limit)
@@ -42,16 +49,17 @@ final class OnetAdapter {
 
                 return elements;
             }
-
-
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new ArticleSourceConnectionFailedException();
         }
     }
 
     static OnetArticleDetails getArticleDetails(String articleUrl) {
         try {
-            Document res = Jsoup.connect(articleUrl).get();
+            Connection conn = Jsoup.connect(articleUrl);
+            checkResponseStatus(conn.execute().statusCode());
+
+            Document res = conn.get();
             String pubDate = res.getElementsByAttributeValue("property", "article:published_time").attr("content");
 
             List<String> tagsList = new ArrayList<>();
@@ -62,8 +70,13 @@ final class OnetAdapter {
 
             return new OnetArticleDetails(pubDate, tagsList);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new ArticleSourceConnectionFailedException();
         }
     }
 
+    private static void checkResponseStatus(int statusCode) {
+        if (statusCode != 200) {
+            throw new ArticleSourceConnectionFailedException(statusCode);
+        }
+    }
 }
