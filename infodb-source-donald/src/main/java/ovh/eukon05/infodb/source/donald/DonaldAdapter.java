@@ -3,6 +3,7 @@ package ovh.eukon05.infodb.source.donald;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import ovh.eukon05.infodb.api.source.ArticleSourceConnectionFailedException;
 
 import java.io.IOException;
 import java.net.URI;
@@ -24,14 +25,12 @@ class DonaldAdapter {
     static {
         // DonaldPL's build ID changes from time to time, so we have to fetch the current one
         StringBuilder url = new StringBuilder("https://www.donald.pl/_next/data/");
-
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("https://www.donald.pl/news"))
-                .GET()
-                .build();
+        HttpRequest request = prepareGetRequest("https://www.donald.pl/news");
 
         try (HttpClient client = HttpClient.newHttpClient()) {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+            checkResponseStatus(response.statusCode());
 
             int start = response.body().indexOf("buildId") + 10;
             int end = start + 21;
@@ -41,7 +40,7 @@ class DonaldAdapter {
 
             LATEST_ARTICLES_URL = url.toString();
         } catch (IOException | InterruptedException e) {
-            throw new RuntimeException(e);
+            throw new ArticleSourceConnectionFailedException();
         }
     }
 
@@ -55,13 +54,11 @@ class DonaldAdapter {
             int page = 1;
 
             do {
-                HttpRequest latestArticlesRequest = HttpRequest
-                        .newBuilder()
-                        .uri(URI.create(String.format(LATEST_ARTICLES_URL, page)))
-                        .GET()
-                        .build();
-
+                HttpRequest latestArticlesRequest = prepareGetRequest(String.format(LATEST_ARTICLES_URL, page));
                 HttpResponse<String> response = client.send(latestArticlesRequest, HttpResponse.BodyHandlers.ofString());
+
+                checkResponseStatus(response.statusCode());
+
                 result.addAll(limit < DONALD_PAGE_LIMIT ? extractIds(response.body(), limit) : extractIds(response.body(), DONALD_PAGE_LIMIT));
                 page++;
                 limit -= DONALD_PAGE_LIMIT;
@@ -70,24 +67,20 @@ class DonaldAdapter {
 
             return result;
         } catch (IOException | InterruptedException e) {
-            throw new RuntimeException(e);
+            throw new ArticleSourceConnectionFailedException();
         }
     }
 
     static JsonObject getArticleDetails(String articleId){
         try (HttpClient client = HttpClient.newBuilder().followRedirects(HttpClient.Redirect.ALWAYS).build()) {
-
-            HttpRequest latestArticlesRequest = HttpRequest
-                    .newBuilder()
-                    .uri(URI.create(String.format(ARTICLE_DETAILS_URL, articleId)))
-                    .GET()
-                    .build();
-
+            HttpRequest latestArticlesRequest = prepareGetRequest(String.format(ARTICLE_DETAILS_URL, articleId));
             HttpResponse<String> response = client.send(latestArticlesRequest, HttpResponse.BodyHandlers.ofString());
+
+            checkResponseStatus(response.statusCode());
 
             return GSON.fromJson(response.body(), JsonObject.class);
         } catch (IOException | InterruptedException e) {
-            throw new RuntimeException(e);
+            throw new ArticleSourceConnectionFailedException();
         }
     }
 
@@ -101,5 +94,18 @@ class DonaldAdapter {
                 .map(JsonElement::getAsJsonObject)
                 .map(e -> e.get("uuid").getAsString())
                 .toList();
+    }
+
+    private static HttpRequest prepareGetRequest(String url) {
+        return HttpRequest.newBuilder()
+                .uri(URI.create(url))
+                .GET()
+                .build();
+    }
+
+    private static void checkResponseStatus(int statusCode) {
+        if (statusCode != 200) {
+            throw new ArticleSourceConnectionFailedException(statusCode);
+        }
     }
 }
