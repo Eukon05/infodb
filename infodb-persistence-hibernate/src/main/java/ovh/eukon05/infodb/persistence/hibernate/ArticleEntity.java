@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
 @Entity
 @Table(name = "Article")
 class ArticleEntity {
-    private static final Pattern urlRegex = Pattern.compile("https?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{2,256}\\.[a-z]{2,4}\\b([-a-zA-Z0-9@:%_\\+.~#?&//=]*)");
+    private static final Pattern urlRegex = Pattern.compile("https?://(www\\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\\.[a-z]{2,4}\\b([-a-zA-Z0-9@:%_+.~#?&/=]*)");
 
     @Id
     private String id;
@@ -31,13 +31,13 @@ class ArticleEntity {
     }
 
     ArticleEntity(String id, String title, String url, String origin, String imageUrl, Instant datePublished, List<String> tags) {
-        this.id = id;
-        this.title = title;
-        this.url = url;
-        this.origin = origin;
-        this.imageUrl = imageUrl;
-        this.datePublished = datePublished;
-        this.tags = tags;
+        setId(id);
+        setTitle(title);
+        setUrl(url);
+        setOrigin(origin);
+        setImageUrl(imageUrl);
+        setDatePublished(datePublished);
+        setTags(tags);
     }
 
     String getId() {
@@ -61,12 +61,7 @@ class ArticleEntity {
     }
 
     void setOrigin(String origin) {
-        origin = Objects.requireNonNull(origin);
-
-        if (urlRegex.matcher(origin).matches())
-            this.origin = origin;
-        else
-            throw new IllegalArgumentException("Origin must be a valid URL");
+        this.origin = Objects.requireNonNull(origin);
     }
 
     String getUrl() {
@@ -91,8 +86,10 @@ class ArticleEntity {
 
         if (urlRegex.matcher(imageUrl).matches())
             this.imageUrl = imageUrl;
-        else
+        else {
+            System.out.println(imageUrl);
             throw new IllegalArgumentException("ImageUrl must be a valid URL");
+        }
     }
 
     Instant getDatePublished() {
