@@ -17,6 +17,7 @@
         <module>infodb-api-source-test</module>
         <module>infodb-api-persistence</module>
         <module>infodb-persistence-hashmap</module>
+        <module>infodb-persistence-hibernate</module>
     </modules>
 
     <dependencies>

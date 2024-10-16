@@ -2,17 +2,21 @@ package ovh.eukon05.infodb.app;
 
 import ovh.eukon05.infodb.api.persistence.ArticleDAO;
 import ovh.eukon05.infodb.api.persistence.ArticleDTO;
-import ovh.eukon05.infodb.api.persistence.ArticleSearchCriteria;
 import ovh.eukon05.infodb.api.source.ArticleSource;
 
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
 import java.util.ServiceLoader;
 
 public class Main {
     public static void main(String[] args) {
         ServiceLoader<ArticleSource> sources = ServiceLoader.load(ArticleSource.class);
-        ArticleDAO dao = ServiceLoader.load(ArticleDAO.class).iterator().next();
+        ArticleDAO dao = null;
+
+        for (ArticleDAO d : ServiceLoader.load(ArticleDAO.class)) {
+            if (d.getClass().getName().contains("Hibernate")) {
+                dao = d;
+                break;
+            }
+        }
 
         for (ArticleSource source : sources) {
             source.getLatest(20).stream()
@@ -20,7 +24,8 @@ public class Main {
                     .forEach(dao::save);
         }
 
-        ArticleSearchCriteria criteria = new ArticleSearchCriteria(null, null, Instant.now().minus(2, ChronoUnit.HOURS), Instant.now().minus(30, ChronoUnit.MINUTES), null);
-        dao.findByCriteria(criteria, 0).forEach(System.out::println);
+        //ArticleSearchCriteria criteria = new ArticleSearchCriteria(null, null, Instant.now().minus(2, ChronoUnit.HOURS), Instant.now().minus(30, ChronoUnit.MINUTES), null);
+        //dao.findByCriteria(criteria, 0).forEach(System.out::println);
+        dao.getLatest(0).forEach(System.out::println);
     }
 }
