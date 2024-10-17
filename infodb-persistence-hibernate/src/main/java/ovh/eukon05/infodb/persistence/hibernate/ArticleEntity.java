@@ -97,7 +97,12 @@ class ArticleEntity {
     }
 
     void setDatePublished(Instant datePublished) {
-        this.datePublished = Objects.requireNonNull(datePublished);
+        Objects.requireNonNull(datePublished);
+
+        if (datePublished.isAfter(Instant.now()))
+            throw new IllegalArgumentException("datePublished must be less than or equal to the current datetime");
+
+        this.datePublished = datePublished;
     }
 
     List<String> getTags() {
