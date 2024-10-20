@@ -1,5 +1,6 @@
 package ovh.eukon05.infodb.persistence.hibernate.test;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import ovh.eukon05.infodb.api.persistence.ArticleDAO;
 import ovh.eukon05.infodb.api.persistence.ArticleDTO;
@@ -16,6 +17,14 @@ class HibernateDAOTests {
     private static final String TEST_ORIGIN = "TEST";
     private static final String TEST_URL = "https://test.com/%s";
     private static final String TEST_IMG_URL = "https://test.com/%s/image.png";
+
+    @BeforeAll
+    static void init() {
+        Properties p = System.getProperties();
+        p.setProperty("DB_URL", "jdbc:h2:mem:db1;DB_CLOSE_DELAY=-1");
+        p.setProperty("DB_USER", "sa");
+        p.setProperty("DB_PASS", "");
+    }
 
     @Test
     void should_save_and_find_article() {
