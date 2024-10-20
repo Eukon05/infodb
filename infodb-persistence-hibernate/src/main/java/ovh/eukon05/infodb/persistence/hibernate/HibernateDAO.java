@@ -22,7 +22,7 @@ public class HibernateDAO implements ArticleDAO {
 
     @Override
     public ArticleDTO findById(String id) {
-        return em.find(ArticleDTO.class, id);
+        return ArticleEntityMapper.mapFromEntity(em.find(ArticleEntity.class, id));
     }
 
     @Override
