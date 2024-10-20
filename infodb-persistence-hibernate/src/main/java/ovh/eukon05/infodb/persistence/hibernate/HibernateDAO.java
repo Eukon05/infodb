@@ -4,10 +4,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Persistence;
 import jakarta.persistence.TypedQuery;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.criteria.Predicate;
-import jakarta.persistence.criteria.Root;
+import jakarta.persistence.criteria.*;
 import ovh.eukon05.infodb.api.persistence.ArticleDAO;
 import ovh.eukon05.infodb.api.persistence.ArticleDTO;
 import ovh.eukon05.infodb.api.persistence.ArticleSearchCriteria;
@@ -72,12 +69,11 @@ public class HibernateDAO implements ArticleDAO {
         if (Optional.ofNullable(criteria.dateTo()).isPresent()) {
             predicates.add(cb.lessThanOrEqualTo(root.get("datePublished"), criteria.dateTo()));
         }
-        // This predicate checks if ALL the tags belong to the article, not if at least one!
         if (Optional.ofNullable(criteria.tags()).isPresent() && !criteria.tags().isEmpty()) {
-            for (String tag : criteria.tags()) {
-                predicates.add(cb.isMember(tag, root.get("tags")));
-            }
+            Join<ArticleEntity, String> join = root.join("tags");
+            predicates.add(join.in(criteria.tags()));
         }
+
 
         cr.where(cb.and(predicates.toArray(new Predicate[]{}))).orderBy(cb.desc(root.get("datePublished")));
         return em.createQuery(cr)
