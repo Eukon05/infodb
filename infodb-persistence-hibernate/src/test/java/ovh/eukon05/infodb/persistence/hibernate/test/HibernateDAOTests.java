@@ -13,7 +13,7 @@ import java.util.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 class HibernateDAOTests {
-    private final ArticleDAO dao = ServiceLoader.load(ArticleDAO.class).iterator().next();
+    private static ArticleDAO dao;
     private static final String TEST_ORIGIN = "TEST";
     private static final String TEST_URL = "https://test.com/%s";
     private static final String TEST_IMG_URL = "https://test.com/%s/image.png";
@@ -24,6 +24,8 @@ class HibernateDAOTests {
         p.setProperty("DB_URL", "jdbc:h2:mem:db1;DB_CLOSE_DELAY=-1");
         p.setProperty("DB_USER", "sa");
         p.setProperty("DB_PASS", "");
+
+        dao = ServiceLoader.load(ArticleDAO.class).iterator().next();
     }
 
     @Test
