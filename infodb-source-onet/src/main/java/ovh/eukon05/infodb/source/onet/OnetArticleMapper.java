@@ -7,7 +7,7 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
 final class OnetArticleMapper {
-    private static final String IMG_PREFIX = "https:%s";
+    private static final String HTTPS_PREFIX = "https:";
     private static final String URL_PREFIX = "https://wiadomosci.onet.pl/%s";
     private static final String PROVIDER = "ONET";
     private static final DateTimeFormatter DTF = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ssZ");
@@ -22,7 +22,9 @@ final class OnetArticleMapper {
         String id = tokens[tokens.length - 1];
         String url = String.format(URL_PREFIX, id);
 
-        String imageUrl = String.format(IMG_PREFIX, articleElement.getElementsByTag("img").attr("src"));
+        String extractedImgUrl = articleElement.getElementsByTag("img").attr("src");
+
+        String imageUrl = extractedImgUrl.startsWith(HTTPS_PREFIX) ? extractedImgUrl : HTTPS_PREFIX.concat(extractedImgUrl);
         String title = articleElement.getElementsByTag("span").text();
 
         // Article will have its publication time shifted to the UTC timezone this way!
