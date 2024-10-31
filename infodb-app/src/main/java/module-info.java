@@ -1,9 +1,15 @@
 import ovh.eukon05.infodb.api.persistence.ArticleDAO;
 import ovh.eukon05.infodb.api.source.ArticleSource;
 
-module ovh.eukon05.infodb.app {
+open module ovh.eukon05.infodb.app {
     requires ovh.eukon05.infodb.api.source;
     requires ovh.eukon05.infodb.api.persistence;
+    requires spring.boot;
+    requires spring.boot.autoconfigure;
+    requires spring.context;
+    requires jakarta.persistence;
+    requires org.slf4j;
+    requires spring.web;
     uses ArticleSource;
     uses ArticleDAO;
 }

@@ -19,7 +19,8 @@ public class HibernateDAO implements ArticleDAO {
 
     @Override
     public ArticleDTO findById(String id) {
-        return ArticleEntityMapper.mapFromEntity(em.find(ArticleEntity.class, id));
+        ArticleEntity entity = em.find(ArticleEntity.class, id);
+        return entity == null ? null : ArticleEntityMapper.mapFromEntity(entity);
     }
 
     @Override
