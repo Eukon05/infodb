@@ -1,5 +1,6 @@
 package ovh.eukon05.infodb.app;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
 import ovh.eukon05.infodb.api.persistence.ArticleDAO;
 import ovh.eukon05.infodb.api.persistence.ArticleDTO;
@@ -10,6 +11,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/articles")
 @CrossOrigin(origins = {"http://localhost:3000", "http://127.0.0.1:3000"})
+@Tag(name = "Articles", description = "API methods related to fetching article data collected by infodb")
 class ApiController {
     private final ArticleDAO dao;
 

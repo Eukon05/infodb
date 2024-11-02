@@ -10,6 +10,7 @@ open module ovh.eukon05.infodb.app {
     requires jakarta.persistence;
     requires org.slf4j;
     requires spring.web;
+    requires io.swagger.v3.oas.annotations;
     uses ArticleSource;
     uses ArticleDAO;
 }
