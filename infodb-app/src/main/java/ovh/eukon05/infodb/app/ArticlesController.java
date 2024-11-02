@@ -12,10 +12,10 @@ import java.util.List;
 @RequestMapping("/api/v1/articles")
 @CrossOrigin(origins = {"http://localhost:3000", "http://127.0.0.1:3000"})
 @Tag(name = "Articles", description = "API methods related to fetching article data collected by infodb")
-class ApiController {
+class ArticlesController {
     private final ArticleDAO dao;
 
-    public ApiController(List<ArticleDAO> daos) {
+    public ArticlesController(List<ArticleDAO> daos) {
         dao = daos.get(0);
     }
 

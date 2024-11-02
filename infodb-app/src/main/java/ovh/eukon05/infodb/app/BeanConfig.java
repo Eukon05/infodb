@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import ovh.eukon05.infodb.api.persistence.ArticleDAO;
 import ovh.eukon05.infodb.api.source.ArticleSource;
+import ovh.eukon05.infodb.api.source.ArticleSourceInfo;
 
 import java.util.List;
 import java.util.ServiceLoader;
@@ -31,5 +32,10 @@ class BeanConfig {
         }
 
         return loader.stream().map(ServiceLoader.Provider::get).toList();
+    }
+
+    @Bean
+    List<ArticleSourceInfo> articleSourceInfos() {
+        return articleSources().stream().map(ArticleSource::getSourceInfo).toList();
     }
 }

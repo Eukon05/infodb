@@ -10,4 +10,6 @@ public interface ArticleSource {
     }
 
     List<Article> getLatest(int limit);
+
+    ArticleSourceInfo getSourceInfo();
 }
