@@ -2,6 +2,7 @@ package ovh.eukon05.infodb.source.onet;
 
 import org.jsoup.nodes.Element;
 import ovh.eukon05.infodb.api.source.Article;
+import ovh.eukon05.infodb.api.source.ArticleSourceInfo;
 
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -9,13 +10,12 @@ import java.time.format.DateTimeFormatter;
 final class OnetArticleMapper {
     private static final String HTTPS_PREFIX = "https:";
     private static final String URL_PREFIX = "https://wiadomosci.onet.pl/%s";
-    private static final String PROVIDER = "ONET";
     private static final DateTimeFormatter DTF = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ssZ");
 
     private OnetArticleMapper() {
     }
 
-    static Article mapFromHtml(Element articleElement, OnetArticleDetails details) {
+    static Article mapFromHtml(Element articleElement, OnetArticleDetails details, ArticleSourceInfo sourceInfo) {
         String urlLong = articleElement.attr("href");
         String[] tokens = urlLong.split("/");
 
@@ -30,6 +30,6 @@ final class OnetArticleMapper {
         // Article will have its publication time shifted to the UTC timezone this way!
         ZonedDateTime pubDate = ZonedDateTime.parse(details.pubDate(), DTF);
 
-        return new Article(id, PROVIDER, title, url, imageUrl, pubDate.toInstant(), details.tags());
+        return new Article(id, sourceInfo.name(), title, url, imageUrl, pubDate.toInstant(), details.tags());
     }
 }
