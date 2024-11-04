@@ -9,20 +9,19 @@ import ovh.eukon05.infodb.api.persistence.ArticleDTO;
 import ovh.eukon05.infodb.api.source.Article;
 import ovh.eukon05.infodb.api.source.ArticleSource;
 
-import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
+import java.util.Queue;
 import java.util.function.Function;
 
 @Service
 class PersistenceScheduler {
-
     private static final Logger LOGGER = LoggerFactory.getLogger(PersistenceScheduler.class);
     private static final Function<Article, ArticleDTO> MAPPER = article -> new ArticleDTO(article.id(), article.origin(), article.title(), article.url(), article.imageUrl(), article.datePublished(), article.tags());
 
     private final List<ArticleSource> sources;
     private final List<ArticleDAO> daos;
-    private final Set<String> cache = new HashSet<>();
+    private final Queue<String> cache = new LinkedList<>();
 
     public PersistenceScheduler(List<ArticleSource> sources, List<ArticleDAO> daos) {
         this.sources = sources;
@@ -53,5 +52,13 @@ class PersistenceScheduler {
         });
 
         LOGGER.info("Scheduled article fetch finished");
+
+        if (cache.size() > sources.size() * ArticleSource.DEFAULT_LIMIT * 3) {
+            LOGGER.info("Removing excess cache entries");
+
+            for (int i = 0; i < sources.size() * ArticleSource.DEFAULT_LIMIT; i++) {
+                cache.remove();
+            }
+        }
     }
 }
