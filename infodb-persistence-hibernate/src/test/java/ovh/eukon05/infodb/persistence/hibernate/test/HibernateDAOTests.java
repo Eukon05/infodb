@@ -21,9 +21,9 @@ class HibernateDAOTests {
     @BeforeAll
     static void init() {
         Properties p = System.getProperties();
-        p.setProperty("DB_URL", "jdbc:h2:mem:db1;DB_CLOSE_DELAY=-1");
-        p.setProperty("DB_USER", "sa");
-        p.setProperty("DB_PASS", "");
+        p.setProperty("infodb.hibernate.db.url", "jdbc:h2:mem:db1;DB_CLOSE_DELAY=-1");
+        p.setProperty("infodb.hibernate.db.user", "sa");
+        p.setProperty("infodb.hibernate.db.pass", "");
 
         dao = ServiceLoader.load(ArticleDAO.class).iterator().next();
     }

@@ -16,6 +16,7 @@ import java.util.function.Function;
 
 @Service
 class PersistenceScheduler {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(PersistenceScheduler.class);
     private static final Function<Article, ArticleDTO> MAPPER = article -> new ArticleDTO(article.id(), article.origin(), article.title(), article.url(), article.imageUrl(), article.datePublished(), article.tags());
 
@@ -28,7 +29,7 @@ class PersistenceScheduler {
         this.daos = daos;
     }
 
-    @Scheduled(initialDelay = 0, fixedDelay = 300000)
+    @Scheduled(initialDelay = 0, fixedDelayString = "${infodb.scheduler.delay}")
     private void fetchAndSave() {
         LOGGER.info("Scheduled article fetch started");
 

@@ -11,6 +11,7 @@ open module ovh.eukon05.infodb.app {
     requires org.slf4j;
     requires spring.web;
     requires io.swagger.v3.oas.annotations;
+    requires spring.beans;
     uses ArticleSource;
     uses ArticleDAO;
 }

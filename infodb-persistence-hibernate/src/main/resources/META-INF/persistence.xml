@@ -12,9 +12,9 @@
 
         <properties>
             <!-- Database connection settings -->
-            <property name="jakarta.persistence.jdbc.url" value="${DB_URL}"/>
-            <property name="jakarta.persistence.jdbc.user" value="${DB_USER}"/>
-            <property name="jakarta.persistence.jdbc.password" value="${DB_PASS}"/>
+            <property name="jakarta.persistence.jdbc.url" value="${infodb.hibernate.db.url}"/>
+            <property name="jakarta.persistence.jdbc.user" value="${infodb.hibernate.db.user}"/>
+            <property name="jakarta.persistence.jdbc.password" value="${infodb.hibernate.db.pass}"/>
 
             <!-- Automatically export the schema -->
             <property name="jakarta.persistence.schema-generation.database.action" value="create"/>
