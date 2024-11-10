@@ -20,7 +20,7 @@ final class WpAdapter {
 
     private static final String ARTICLE_DETAILS_QUERY = """
             {
-              "query": "query Collections { collections(productId: \\"5973184000386177\\") { article(id: \\"%s\\") { created tags { slug } } }}"
+              "query": "query Collections { collections(productId: \\"5973184000386177\\") { article(id: \\"%s\\") { created tags { slug } image { height width } } }}"
             }""";
 
     private static final Gson GSON = new Gson();
