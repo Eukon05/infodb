@@ -3,8 +3,16 @@ name: Java CI with Maven
 on:
   push:
     branches: [ "prototype" ]
+    paths-ignore:
+      - README.md
+      - .github/**
+      - .gitignore
   pull_request:
     branches: [ "prototype" ]
+    paths-ignore:
+      - README.md
+      - .github/**
+      - .gitignore
 
 jobs:
   build:
