@@ -12,6 +12,11 @@ open module ovh.eukon05.infodb.app {
     requires spring.web;
     requires io.swagger.v3.oas.annotations;
     requires spring.beans;
+    requires org.apache.tomcat.embed.core;
+    requires com.fasterxml.jackson.databind;
+    requires org.apache.commons.lang3;
+    requires jakarta.xml.bind;
+    requires jakarta.validation;
     uses ArticleSource;
     uses ArticleDAO;
 }
