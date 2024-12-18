@@ -67,3 +67,41 @@ I was heavily inspired by "hexagonal architecture", or "ports-and-adapters", whi
 the app is independent of the other.
 
 Every article source module and every database module contains unit tests to check if it behaves as expected.
+
+## How to run
+
+The app can be run from source using the latest version of Maven 3 and Java 21 (or later).  
+To run the app, clone the repo to a folder of your choice and run the following command in the root directory of the
+project:
+
+`
+mvn clean package -DskipTests
+`
+
+You can run the tests if you want, but every commit is tested on push by GitHub Actions so this step can be skipped as
+suggested.
+
+After the build is finished, you can run the app with the following command:
+
+```shell
+cd infodb-app/target && \
+java "-Dinfodb.sources.articlelimit=20" \
+"-Dinfodb.hibernate.db.user=sa" \
+"-Dinfodb.hibernate.db.pass= " \
+"-Dinfodb.hibernate.db.url=jdbc:h2:mem:db1;DB_CLOSE_DELAY=-1" \
+--module-path "infodb-app-1.0-SNAPSHOT.jar:modules" \
+-m ovh.eukon05.infodb.app/ovh.eukon05.infodb.app.Main
+```
+
+(on Windows, replace the colon with a semicolon in the module path and the backslashes with backticks `` ` ``).
+
+Make sure to substitute the values of the system properties with your own.
+
+By default, the app ships with an H2DB driver to allow for easy testing with an in-memory db, and an additional
+PostgreSQL driver.  
+To use a database of your own, download the necessary driver JAR and place it in the `infodb-app/target/modules`
+directory and substitute the values in the launch command with the url and credentials of your db.
+
+The default limit of articles fetched in one go (per source) is 20, but you can change it by modifying the launch
+command. However, keep in mind that some sources have a maximum limit imposed by their API and will not allow the app to
+fetch more than that. An example is Wirtualna Polska, with an API limit of 75 articles max.
