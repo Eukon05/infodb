@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public final class WpSource implements ArticleSource {
-    private static final ArticleSourceInfo sourceInfo = new ArticleSourceInfo("WP", "https://wiadomosci.wp.pl/");
+    private static final ArticleSourceInfo sourceInfo = new ArticleSourceInfo("WP", "https://wiadomosci.wp.pl");
 
     @Override
     public List<Article> getLatest(int limit) {
