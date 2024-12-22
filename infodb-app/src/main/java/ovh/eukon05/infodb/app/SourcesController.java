@@ -11,7 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/sources")
-@CrossOrigin(origins = {"http://localhost:3000", "http://127.0.0.1:3000"})
+@CrossOrigin
 @Tag(name = "Sources", description = "API methods exposing details about article sources used by infodb")
 class SourcesController {
     private final List<ArticleSourceInfo> sourceInfoList;
