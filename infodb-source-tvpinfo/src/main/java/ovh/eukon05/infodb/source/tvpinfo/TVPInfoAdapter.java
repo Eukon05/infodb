@@ -4,15 +4,15 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import ovh.eukon05.infodb.api.source.ArticleSourceAdapter;
 import ovh.eukon05.infodb.api.source.ArticleSourceConnectionFailedException;
 
 import java.io.IOException;
-import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
-class TVPInfoAdapter {
+class TVPInfoAdapter extends ArticleSourceAdapter {
     private static final int TVPINFO_PAGE_LIMIT = 100;
     private static final Gson GSON = new Gson();
     private static final String LATEST_ARTICLES_URL = "https://www.tvp.info/api/info/list?id=71921924&page=%d&limit=%d";
@@ -61,19 +61,6 @@ class TVPInfoAdapter {
             }
         } catch (IOException | InterruptedException e) {
             throw new ArticleSourceConnectionFailedException();
-        }
-    }
-
-    private static HttpRequest prepareGetRequest(String url) {
-        return HttpRequest.newBuilder()
-                .uri(URI.create(url))
-                .GET()
-                .build();
-    }
-
-    private static void checkResponseStatus(int statusCode) {
-        if (statusCode != 200) {
-            throw new ArticleSourceConnectionFailedException(statusCode);
         }
     }
 }

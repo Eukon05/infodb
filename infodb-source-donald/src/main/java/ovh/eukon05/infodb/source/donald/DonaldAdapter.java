@@ -3,17 +3,17 @@ package ovh.eukon05.infodb.source.donald;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import ovh.eukon05.infodb.api.source.ArticleSourceAdapter;
 import ovh.eukon05.infodb.api.source.ArticleSourceConnectionFailedException;
 
 import java.io.IOException;
-import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.List;
 
-class DonaldAdapter {
+class DonaldAdapter extends ArticleSourceAdapter {
     private static final int DONALD_PAGE_LIMIT = 20;
     private static final Gson GSON = new Gson();
     private static final String LATEST_ARTICLES_URL;
@@ -94,18 +94,5 @@ class DonaldAdapter {
                 .map(JsonElement::getAsJsonObject)
                 .map(e -> e.get("uuid").getAsString())
                 .toList();
-    }
-
-    private static HttpRequest prepareGetRequest(String url) {
-        return HttpRequest.newBuilder()
-                .uri(URI.create(url))
-                .GET()
-                .build();
-    }
-
-    private static void checkResponseStatus(int statusCode) {
-        if (statusCode != 200) {
-            throw new ArticleSourceConnectionFailedException(statusCode);
-        }
     }
 }

@@ -3,16 +3,16 @@ package ovh.eukon05.infodb.source.wp;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import ovh.eukon05.infodb.api.source.ArticleSourceAdapter;
 import ovh.eukon05.infodb.api.source.ArticleSourceConnectionFailedException;
 
 import java.io.IOException;
-import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
-final class WpAdapter {
-    private static final URI SOURCE_URI = URI.create("https://wiadomosci.wp.pl/api/v1/data/graphql");
+final class WpAdapter extends ArticleSourceAdapter {
+    private static final String SOURCE_URI = "https://wiadomosci.wp.pl/api/v1/data/graphql";
     private static final String LATEST_ARTICLES_QUERY = """
             {
               "query": "query Recommendations { recommendations { newest(productIds: \\"5973184000386177\\", limit: %d, contentTypes: ARTICLE) { version count teasers { url type subtype slug title author sponsored publications { productId url } image contentId } } }}"
@@ -35,7 +35,7 @@ final class WpAdapter {
             throw new IllegalArgumentException("WP's API does not support fetching more than 75 latest articles");
 
         try (HttpClient client = HttpClient.newHttpClient()) {
-            HttpRequest latestArticlesRequest = preparePostRequest(String.format(LATEST_ARTICLES_QUERY, limit));
+            HttpRequest latestArticlesRequest = preparePostRequest(SOURCE_URI, String.format(LATEST_ARTICLES_QUERY, limit));
 
             HttpResponse<String> response = client.send(latestArticlesRequest, HttpResponse.BodyHandlers.ofString());
             checkResponseStatus(response.statusCode());
@@ -48,7 +48,7 @@ final class WpAdapter {
 
     static JsonObject getArticleDetails(String articleId){
         try (HttpClient client = HttpClient.newHttpClient()) {
-            HttpRequest articleDetailsRequest = preparePostRequest(String.format(ARTICLE_DETAILS_QUERY, articleId));
+            HttpRequest articleDetailsRequest = preparePostRequest(SOURCE_URI, String.format(ARTICLE_DETAILS_QUERY, articleId));
 
             HttpResponse<String> response = client.send(articleDetailsRequest, HttpResponse.BodyHandlers.ofString());
             checkResponseStatus(response.statusCode());
@@ -72,18 +72,5 @@ final class WpAdapter {
                 .getAsJsonObject("recommendations")
                 .getAsJsonObject("newest")
                 .getAsJsonArray("teasers");
-    }
-
-    private static HttpRequest preparePostRequest(String body) {
-        return HttpRequest.newBuilder()
-                .POST(HttpRequest.BodyPublishers.ofString(body))
-                .uri(SOURCE_URI)
-                .build();
-    }
-
-    private static void checkResponseStatus(int statusCode) {
-        if (statusCode != 200) {
-            throw new ArticleSourceConnectionFailedException(statusCode);
-        }
     }
 }
