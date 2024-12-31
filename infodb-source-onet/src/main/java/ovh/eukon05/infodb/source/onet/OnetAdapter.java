@@ -4,13 +4,14 @@ import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
+import ovh.eukon05.infodb.api.source.ArticleSourceAdapter;
 import ovh.eukon05.infodb.api.source.ArticleSourceConnectionFailedException;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-final class OnetAdapter {
+final class OnetAdapter extends ArticleSourceAdapter {
     private static final String SOURCE_URL = "https://wiadomosci.onet.pl/?page=%d&limit=%d&ajax=1";
     private static final int ONET_PAGE_LIMIT = 105;
 
@@ -71,12 +72,6 @@ final class OnetAdapter {
             return new OnetArticleDetails(pubDate, tagsList);
         } catch (IOException e) {
             throw new ArticleSourceConnectionFailedException();
-        }
-    }
-
-    private static void checkResponseStatus(int statusCode) {
-        if (statusCode != 200) {
-            throw new ArticleSourceConnectionFailedException(statusCode);
         }
     }
 }
