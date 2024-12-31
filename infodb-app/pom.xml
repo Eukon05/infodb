@@ -37,6 +37,11 @@
         </dependency>
         <dependency>
             <groupId>ovh.eukon05</groupId>
+            <artifactId>infodb-source-tvpinfo</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>ovh.eukon05</groupId>
             <artifactId>infodb-api-persistence</artifactId>
             <version>1.0-SNAPSHOT</version>
             <scope>compile</scope>
