@@ -14,6 +14,7 @@ Currently, the app supports three news sources:
 - Onet
 - Wirtualna Polska
 - DonaldPL
+- TVP Info
 
 With more planned to be added later.
 
