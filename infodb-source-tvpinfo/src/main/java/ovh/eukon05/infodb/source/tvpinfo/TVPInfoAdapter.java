@@ -8,6 +8,7 @@ import ovh.eukon05.infodb.api.source.ArticleSourceAdapter;
 import ovh.eukon05.infodb.api.source.ArticleSourceConnectionFailedException;
 
 import java.io.IOException;
+import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
@@ -16,6 +17,7 @@ class TVPInfoAdapter extends ArticleSourceAdapter {
     private static final int TVPINFO_PAGE_LIMIT = 100;
     private static final Gson GSON = new Gson();
     private static final String LATEST_ARTICLES_URL = "https://www.tvp.info/api/info/list?id=71921924&page=%d&limit=%d";
+    private static final String TAGS_URL = "https://www.tvp.info/api/info/meta?id=%s";
 
     private TVPInfoAdapter() {
     }
@@ -59,6 +61,25 @@ class TVPInfoAdapter extends ArticleSourceAdapter {
 
                 return result;
             }
+        } catch (IOException | InterruptedException e) {
+            throw new ArticleSourceConnectionFailedException();
+        }
+    }
+
+    static String[] getTags(String articleId) {
+        try (HttpClient client = HttpClient.newHttpClient()) {
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(TAGS_URL.formatted(articleId)))
+                    .build();
+
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            checkResponseStatus(response.statusCode());
+
+            return GSON.fromJson(response.body(), JsonObject.class)
+                    .getAsJsonObject("data")
+                    .get("meta_keywords")
+                    .getAsString()
+                    .split(", ");
         } catch (IOException | InterruptedException e) {
             throw new ArticleSourceConnectionFailedException();
         }

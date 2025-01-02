@@ -16,7 +16,11 @@ public class TVPInfoSource implements ArticleSource {
                 .asList()
                 .stream()
                 .map(JsonElement::getAsJsonObject)
-                .map(json -> TVPInfoArticleMapper.mapFromJson(json, SOURCE_INFO))
+                .map(json -> {
+                    String id = json.get("_id").getAsString();
+                    String[] tags = TVPInfoAdapter.getTags(id);
+                    return TVPInfoArticleMapper.mapFromJson(json, SOURCE_INFO, tags);
+                })
                 .toList();
     }
 

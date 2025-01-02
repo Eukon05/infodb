@@ -49,7 +49,7 @@ public class HashmapDAO implements ArticleDAO {
             if (Optional.ofNullable(criteria.title()).isPresent() && !e.title().toLowerCase().contains(criteria.title().toLowerCase())) {
                 return false;
             }
-            if (Optional.ofNullable(criteria.origin()).isPresent() && !e.origin().equals(criteria.origin())) {
+            if (Optional.ofNullable(criteria.origins()).isPresent() && !criteria.origins().contains(e.origin())) {
                 return false;
             }
             if (Optional.ofNullable(criteria.tags()).isPresent() && Collections.disjoint(e.tags(), criteria.tags())) {

@@ -5,13 +5,13 @@ import ovh.eukon05.infodb.api.source.Article;
 import ovh.eukon05.infodb.api.source.ArticleSourceInfo;
 
 import java.time.Instant;
-import java.util.Collections;
+import java.util.Arrays;
 
 class TVPInfoArticleMapper {
     private TVPInfoArticleMapper() {
     }
 
-    static Article mapFromJson(JsonObject json, ArticleSourceInfo sourceInfo) {
+    static Article mapFromJson(JsonObject json, ArticleSourceInfo sourceInfo, String[] tags) {
         String id = json.get("_id").getAsString();
         String title = json.get("title").getAsString();
         String url = json.get("url").getAsString();
@@ -26,6 +26,6 @@ class TVPInfoArticleMapper {
 
         Instant publishedAt = Instant.ofEpochMilli(json.get("release_date").getAsLong());
 
-        return new Article(id, sourceInfo.name(), title, url, imageUrl, publishedAt, Collections.emptyList());
+        return new Article(id, sourceInfo.name(), title, url, imageUrl, publishedAt, Arrays.asList(tags));
     }
 }

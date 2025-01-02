@@ -44,7 +44,7 @@ class HibernateDAOTests {
         ArticleDTO dto = new ArticleDTO(id, TEST_ORIGIN, "Find Me", TEST_URL.formatted(id), TEST_IMG_URL.formatted(id), Instant.now().minus(10, ChronoUnit.DAYS), List.of("find-me-tag"));
         dao.save(dto);
 
-        ArticleSearchCriteria criteria = new ArticleSearchCriteria("Find Me", TEST_ORIGIN, Instant.now().minus(30, ChronoUnit.DAYS), Instant.now().minus(5, ChronoUnit.DAYS), List.of("find-me-tag"));
+        ArticleSearchCriteria criteria = new ArticleSearchCriteria("Find Me", List.of(TEST_ORIGIN), Instant.now().minus(30, ChronoUnit.DAYS), Instant.now().minus(5, ChronoUnit.DAYS), List.of("find-me-tag"));
 
         assertTrue(dao.findByCriteria(criteria).contains(dto));
     }

@@ -4,7 +4,8 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
-public record ArticleSearchCriteria(String title, String origin, Instant dateFrom, Instant dateTo, List<String> tags) {
+public record ArticleSearchCriteria(String title, List<String> origins, Instant dateFrom, Instant dateTo,
+                                    List<String> tags) {
     public ArticleSearchCriteria {
         if (Optional.ofNullable(dateFrom).isPresent() && dateFrom.isAfter(Instant.now()))
             throw new IllegalArgumentException("dateFrom must be less than or equal to the current datetime");

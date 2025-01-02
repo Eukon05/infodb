@@ -59,10 +59,10 @@ public class HibernateDAO implements ArticleDAO {
         List<Predicate> predicates = new ArrayList<>();
 
         if (Optional.ofNullable(criteria.title()).isPresent()) {
-            predicates.add(cb.like(cb.lower(root.get("title")), "%" + criteria.title().toLowerCase() + "%"));
+            predicates.add(cb.like(cb.lower(root.get("title")), '%' + criteria.title().toLowerCase() + '%'));
         }
-        if (Optional.ofNullable(criteria.origin()).isPresent()) {
-            predicates.add(cb.equal(root.get("origin"), criteria.origin()));
+        if (Optional.ofNullable(criteria.origins()).isPresent()) {
+            predicates.add(root.get("origin").in(criteria.origins()));
         }
         if (Optional.ofNullable(criteria.dateFrom()).isPresent()) {
             predicates.add(cb.greaterThanOrEqualTo(root.get("datePublished"), criteria.dateFrom()));
