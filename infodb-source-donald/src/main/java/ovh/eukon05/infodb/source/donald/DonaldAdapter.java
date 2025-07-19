@@ -36,7 +36,7 @@ class DonaldAdapter extends ArticleSourceAdapter {
             int end = start + 21;
 
             url.append(response.body(), start, end);
-            url.append("/news.json");
+            url.append("/news.json?page=%d");
 
             LATEST_ARTICLES_URL = url.toString();
         } catch (IOException | InterruptedException e) {

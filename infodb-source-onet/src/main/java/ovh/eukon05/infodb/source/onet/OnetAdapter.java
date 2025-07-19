@@ -57,11 +57,18 @@ final class OnetAdapter extends ArticleSourceAdapter {
 
     static OnetArticleDetails getArticleDetails(String articleUrl) {
         try {
-            Connection conn = Jsoup.connect(articleUrl);
-            checkResponseStatus(conn.execute().statusCode());
+            String pubDate = "";
+            Document res = null;
 
-            Document res = conn.get();
-            String pubDate = res.getElementsByAttributeValue("property", "article:published_time").attr("content");
+            // Since the required properties can be missing sometimes, the app retries until they're found,
+            // or a connection error occurs.
+            while (pubDate.isBlank()) {
+                Connection conn = Jsoup.connect(articleUrl);
+                checkResponseStatus(conn.execute().statusCode());
+
+                res = conn.get();
+                pubDate = res.getElementsByAttributeValue("property", "article:published_time").attr("content");
+            }
 
             List<String> tagsList = new ArrayList<>();
 
