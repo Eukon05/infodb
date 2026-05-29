@@ -6,7 +6,7 @@ import ovh.eukon05.infodb.api.source.test.AbstractInfodbSourceTest;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 final class WpTests extends AbstractInfodbSourceTest {
-    // This test tests the expected behavior or WP's internal API, which does not support fetching more than 75 articles
+    // This test tests the expected behavior of WP's internal API, which does not support fetching more than 75 articles
     @Test
     void should_not_fetch_too_much_articles() {
         assertThrows(IllegalArgumentException.class, () -> source.getLatest(getTooBigRandomInt()));
@@ -15,10 +15,10 @@ final class WpTests extends AbstractInfodbSourceTest {
     // 75 articles is a limit put in place by WP's internal API
     @Override
     protected int getCorrectRandomInt() {
-        return RANDOM.nextInt(1, 75);
+        return RANDOM.nextInt(1, 76);
     }
 
     private int getTooBigRandomInt() {
-        return RANDOM.nextInt(75, Integer.MAX_VALUE);
+        return RANDOM.nextInt(76, Integer.MAX_VALUE);
     }
 }

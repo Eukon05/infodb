@@ -1,35 +1,24 @@
 package ovh.eukon05.infodb.source.onet;
 
-import org.jsoup.nodes.Element;
 import ovh.eukon05.infodb.api.source.Article;
 import ovh.eukon05.infodb.api.source.ArticleSourceInfo;
 
-import java.time.ZonedDateTime;
+import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 
 final class OnetArticleMapper {
-    private static final String HTTPS_PREFIX = "https:";
-    private static final String URL_PREFIX = "https://wiadomosci.onet.pl/%s";
-    private static final DateTimeFormatter DTF = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ssZ");
+    private static final DateTimeFormatter RFC_822_OFFSET_DATE_TIME = DateTimeFormatter.ofPattern("uuuu-MM-dd'T'HH:mm:ssZ");
 
     private OnetArticleMapper() {
     }
 
-    static Article mapFromHtml(Element articleElement, OnetArticleDetails details, ArticleSourceInfo sourceInfo) {
-        String urlLong = articleElement.attr("href");
-        String[] tokens = urlLong.split("/");
+    static Article mapToArticle(OnetArticleSummary summary, OnetArticleDetails details, ArticleSourceInfo sourceInfo) {
+        String[] tokens = summary.url().split("/");
 
         String id = tokens[tokens.length - 1];
-        String url = String.format(URL_PREFIX, id);
+        // Article will have its publication time shifted to the UTC timezone this way
+        OffsetDateTime pubDate = OffsetDateTime.parse(details.pubDate(), RFC_822_OFFSET_DATE_TIME);
 
-        String extractedImgUrl = articleElement.getElementsByTag("img").attr("src");
-
-        String imageUrl = extractedImgUrl.startsWith(HTTPS_PREFIX) ? extractedImgUrl : HTTPS_PREFIX.concat(extractedImgUrl);
-        String title = articleElement.getElementsByTag("span").text();
-
-        // Article will have its publication time shifted to the UTC timezone this way!
-        ZonedDateTime pubDate = ZonedDateTime.parse(details.pubDate(), DTF);
-
-        return new Article(id, sourceInfo.name(), title, url, imageUrl, pubDate.toInstant(), details.tags());
+        return new Article(id, sourceInfo.name(), summary.title(), summary.url(), summary.imageUrl(), pubDate.toInstant(), details.tags());
     }
 }
